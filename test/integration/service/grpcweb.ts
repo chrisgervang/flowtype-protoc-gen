@@ -335,8 +335,7 @@ describe("service/grpc-web", () => {
     });
 
     describe("client streaming", () => {
-      const payload = new StreamRequest();
-      payload.setSomeString("some value");
+      const [ payload ] = makePayloads("some value");
 
       it("should route the request to the expected endpoint", (done) => {
         let targetUrl = "";
@@ -390,10 +389,7 @@ describe("service/grpc-web", () => {
       });
 
       it("should allow the caller to supply multiple messages", (done) => {
-        const reqMsgOne = new StreamRequest();
-        reqMsgOne.setSomeString("one");
-        const reqMsgTwo = new StreamRequest();
-        reqMsgTwo.setSomeString("two");
+        const [ reqMsgOne, reqMsgTwo ] = makePayloads("one", "two");
         const sentMessageBytes: ArrayBufferView[] = [];
 
         makeClient(new StubTransportBuilder().withMessageListener(v => { sentMessageBytes.push(v); }))
@@ -453,8 +449,7 @@ describe("service/grpc-web", () => {
     });
 
     describe("bidirectional streaming", () => {
-      const payload = new StreamRequest();
-      payload.setSomeString("some value");
+      const [ payload ] = makePayloads("some value");
 
       it("should route the request to the expected endpoint", (done) => {
         let targetUrl = "";
@@ -508,7 +503,7 @@ describe("service/grpc-web", () => {
 
       it("should handle an error returned ahead of any data by the server", (done) => {
         makeClient(new StubTransportBuilder().withPreMessagesError(grpc.Code.Internal, "some error"))
-          .doBidiStream()
+          .doClientStream()
           .on("status", (status) => {
             assert.equal(status.code, grpc.Code.Internal, "expected grpc status code returned");
             assert.equal(status.details, "some error", "expected grpc error details returned");
@@ -536,10 +531,7 @@ describe("service/grpc-web", () => {
       });
 
       it("should allow the caller to supply multiple messages", (done) => {
-        const reqMsgOne = new StreamRequest();
-        reqMsgOne.setSomeString("one");
-        const reqMsgTwo = new StreamRequest();
-        reqMsgTwo.setSomeString("two");
+        const [ reqMsgOne, reqMsgTwo ] = makePayloads("one", "two");
         const sentMessageBytes: ArrayBufferView[] = [];
 
         makeClient(new StubTransportBuilder().withMessageListener(v => { sentMessageBytes.push(v); }))
