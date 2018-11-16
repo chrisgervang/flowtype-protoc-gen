@@ -30,6 +30,7 @@ export class OrphanService {
 
 export type ServiceError = { message: string, code: number; metadata: grpc.Metadata }
 export type Status = { details: string, code: number; metadata: grpc.Metadata }
+export type ServiceClientOptions = { transport?: grpc.TransportConstructor; debug?: boolean }
 
 interface UnaryResponse {
   cancel(): void;
@@ -59,7 +60,7 @@ interface BidirectionalStream<ReqT, ResT> {
 export class OrphanServiceClient {
   readonly serviceHost: string;
 
-  constructor(serviceHost: string, options?: grpc.RpcOptions);
+  constructor(serviceHost: string, options?: ServiceClientOptions);
   doUnary(
     requestMessage: proto_orphan_pb.OrphanUnaryRequest,
     metadata: grpc.Metadata,
