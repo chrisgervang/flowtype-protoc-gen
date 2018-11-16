@@ -68,7 +68,7 @@ SimpleServiceClient.prototype.doUnary = function doUnary(requestMessage, metadat
   if (arguments.length === 2) {
     callback = arguments[1];
   }
-  var client = grpc.unary(SimpleService.DoUnary, {
+  grpc.unary(SimpleService.DoUnary, {
     request: requestMessage,
     host: this.serviceHost,
     metadata: metadata,
@@ -87,12 +87,6 @@ SimpleServiceClient.prototype.doUnary = function doUnary(requestMessage, metadat
       }
     }
   });
-  return {
-    cancel: function () {
-      callback = null;
-      client.close();
-    }
-  };
 };
 
 SimpleServiceClient.prototype.doServerStream = function doServerStream(requestMessage, metadata) {
@@ -224,7 +218,7 @@ SimpleServiceClient.prototype.delete = function pb_delete(requestMessage, metada
   if (arguments.length === 2) {
     callback = arguments[1];
   }
-  var client = grpc.unary(SimpleService.Delete, {
+  grpc.unary(SimpleService.Delete, {
     request: requestMessage,
     host: this.serviceHost,
     metadata: metadata,
@@ -243,12 +237,6 @@ SimpleServiceClient.prototype.delete = function pb_delete(requestMessage, metada
       }
     }
   });
-  return {
-    cancel: function () {
-      callback = null;
-      client.close();
-    }
-  };
 };
 
 exports.SimpleServiceClient = SimpleServiceClient;

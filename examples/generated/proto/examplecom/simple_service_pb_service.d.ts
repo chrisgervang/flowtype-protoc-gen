@@ -64,9 +64,6 @@ export type ServiceError = { message: string, code: number; metadata: grpc.Metad
 export type Status = { details: string, code: number; metadata: grpc.Metadata }
 export type ServiceClientOptions = { transport: grpc.TransportConstructor; debug?: boolean }
 
-interface UnaryResponse {
-  cancel(): void;
-}
 interface ResponseStream<T> {
   cancel(): void;
   on(type: 'data', handler: (message: T) => void): ResponseStream<T>;
@@ -97,11 +94,11 @@ export class SimpleServiceClient {
     requestMessage: proto_examplecom_simple_service_pb.UnaryRequest,
     metadata: grpc.Metadata,
     callback: (error: ServiceError|null, responseMessage: proto_othercom_external_child_message_pb.ExternalChildMessage|null) => void
-  ): UnaryResponse;
+  ): void;
   doUnary(
     requestMessage: proto_examplecom_simple_service_pb.UnaryRequest,
     callback: (error: ServiceError|null, responseMessage: proto_othercom_external_child_message_pb.ExternalChildMessage|null) => void
-  ): UnaryResponse;
+  ): void;
   doServerStream(requestMessage: proto_examplecom_simple_service_pb.StreamRequest, metadata?: grpc.Metadata): ResponseStream<proto_othercom_external_child_message_pb.ExternalChildMessage>;
   doClientStream(metadata?: grpc.Metadata): RequestStream<google_protobuf_empty_pb.Empty>;
   doBidiStream(metadata?: grpc.Metadata): BidirectionalStream<proto_othercom_external_child_message_pb.ExternalChildMessage>;
@@ -109,10 +106,10 @@ export class SimpleServiceClient {
     requestMessage: proto_examplecom_simple_service_pb.UnaryRequest,
     metadata: grpc.Metadata,
     callback: (error: ServiceError|null, responseMessage: proto_examplecom_simple_service_pb.UnaryResponse|null) => void
-  ): UnaryResponse;
+  ): void;
   delete(
     requestMessage: proto_examplecom_simple_service_pb.UnaryRequest,
     callback: (error: ServiceError|null, responseMessage: proto_examplecom_simple_service_pb.UnaryResponse|null) => void
-  ): UnaryResponse;
+  ): void;
 }
 

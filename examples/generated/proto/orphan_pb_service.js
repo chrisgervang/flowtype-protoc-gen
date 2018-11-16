@@ -39,7 +39,7 @@ OrphanServiceClient.prototype.doUnary = function doUnary(requestMessage, metadat
   if (arguments.length === 2) {
     callback = arguments[1];
   }
-  var client = grpc.unary(OrphanService.DoUnary, {
+  grpc.unary(OrphanService.DoUnary, {
     request: requestMessage,
     host: this.serviceHost,
     metadata: metadata,
@@ -58,12 +58,6 @@ OrphanServiceClient.prototype.doUnary = function doUnary(requestMessage, metadat
       }
     }
   });
-  return {
-    cancel: function () {
-      callback = null;
-      client.close();
-    }
-  };
 };
 
 OrphanServiceClient.prototype.doStream = function doStream(requestMessage, metadata) {
