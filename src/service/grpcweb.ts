@@ -188,12 +188,12 @@ function generateFlowDefinition(fileDescriptor: FileDescriptorProto, exportMap: 
       // Method Type Definitions
       service.methods.forEach(method => {
         printer.printLn(`type ${method.serviceName}${method.nameAsPascalCase} = {`);
-        printer.printIndentedLn(`+methodName: string;`);
-        printer.printIndentedLn(`+service: typeof ${method.serviceName};`);
-        printer.printIndentedLn(`+requestStream: ${method.requestStream};`);
-        printer.printIndentedLn(`+responseStream: ${method.responseStream};`);
-        printer.printIndentedLn(`+requestType: typeof ${method.requestType};`);
-        printer.printIndentedLn(`+responseType: typeof ${method.responseType};`);
+        printer.printIndentedLn(`+methodName: string,`);
+        printer.printIndentedLn(`+service: typeof ${method.serviceName},`);
+        printer.printIndentedLn(`+requestStream: ${method.requestStream},`);
+        printer.printIndentedLn(`+responseStream: ${method.responseStream},`);
+        printer.printIndentedLn(`+requestType: typeof ${method.requestType},`);
+        printer.printIndentedLn(`+responseType: typeof ${method.responseType},`);
         printer.printLn(`};`);
         printer.printEmptyLn();
       });
