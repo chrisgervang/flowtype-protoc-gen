@@ -92,12 +92,10 @@ export function printMessage(fileName: string, exportMap: ExportMap, messageDesc
         }
         printer.printIndentedLn(`get${withUppercase}Map: () => jspb.Map<${keyTypeName}, ${valueTypeName}>;`);
         printer.printIndentedLn(`clear${withUppercase}Map: () => void;`);
-
-        let valueTypeNameToObject = valueTypeName
         if (valueType === MESSAGE_TYPE) {
-          valueTypeNameToObject += `$${objectTypeName}`;
+          valueTypeName += `$${objectTypeName}`;
         }
-        toObjectType.printIndentedLn(`${camelCaseName}Map: Array<[${keyTypeName}${keyType === MESSAGE_TYPE ? `$${objectTypeName}` : ""}, ${valueTypeNameToObject}]>,`);
+        toObjectType.printIndentedLn(`${camelCaseName}Map: Array<[${keyTypeName}${keyType === MESSAGE_TYPE ? `$${objectTypeName}` : ""}, ${valueTypeName}]>,`);
         return;
       }
       const withinNamespace = withinNamespaceFromExportEntryFlow(fullTypeName, fieldMessageType);
