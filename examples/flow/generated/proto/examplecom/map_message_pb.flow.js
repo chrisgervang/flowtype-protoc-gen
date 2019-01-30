@@ -9,11 +9,11 @@ import * as proto_othercom_external_child_message_pb from "../../proto/othercom/
 export class MapMessage$AsClass extends jspb.Message {
   getInternalEnumsMap: () => jspb.Map<number, $Values<typeof MapMessage$AsClass_InternalEnum>>;
   clearInternalEnumsMap: () => void;
-  getInternalChildrenMap: () => jspb.Map<string, MapMessage$AsClass_InternalChildMessage$AsClass$AsObject>;
+  getInternalChildrenMap: () => jspb.Map<string, MapMessage$AsClass_InternalChildMessage$AsClass>;
   clearInternalChildrenMap: () => void;
   getExternalEnumsMap: () => jspb.Map<number, $Values<typeof proto_othercom_external_enum_pb.ExternalEnum>>;
   clearExternalEnumsMap: () => void;
-  getExternalChildrenMap: () => jspb.Map<string, proto_othercom_external_child_message_pb.ExternalChildMessage$AsClass$AsObject>;
+  getExternalChildrenMap: () => jspb.Map<string, proto_othercom_external_child_message_pb.ExternalChildMessage$AsClass>;
   clearExternalChildrenMap: () => void;
   getPrimitiveIntsMap: () => jspb.Map<string, number>;
   clearPrimitiveIntsMap: () => void;
