@@ -15,7 +15,7 @@
     "prepublishOnly": "npm run build"
   },
   "bin": {
-    "protoc-gen-ts": "bin/protoc-gen-ts"
+    "protoc-gen-flow": "bin/protoc-gen-flow"
   },
   "repository": "https://github.com/chrisgervang/flowtype-protoc-gen",
   "keywords": [

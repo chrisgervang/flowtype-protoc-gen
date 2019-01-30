@@ -5,7 +5,7 @@ load("@build_bazel_rules_nodejs//:defs.bzl", "npm_install")
 def declare_file(ctx, filename, file_modifications):
   f = ctx.actions.declare_file(filename)
 
-  # Removes an import that protoc-gen-ts adds that is not needed
+  # Removes an import that protoc-gen-flow adds that is not needed
   for removal in ctx.attr.remove_dependencies:
     file_modifications.append("echo \"$(grep -v \"%s\" %s)\" > %s" % (removal, f.path, f.path))
 

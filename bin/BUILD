@@ -2,7 +2,7 @@ package(default_visibility=["//visibility:public"])
 load("@build_bazel_rules_nodejs//:defs.bzl", "nodejs_binary")
 
 nodejs_binary(
-    name = "protoc-gen-ts",
+    name = "protoc-gen-flow",
     node_modules = "@deps//:node_modules",
     data = [
       "//src:src",
