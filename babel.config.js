@@ -3,6 +3,9 @@ module.exports = function(api) {
   // https://babeljs.io/docs/en/config-files#apicache
   api.cache.forever()
   return {
-    presets: ["@babel/preset-env", "@babel/preset-flow"]
+    presets: ["@babel/preset-env", "@babel/preset-flow"],
+    plugins: [
+      "@babel/plugin-proposal-class-properties"
+    ]
   };
 };
