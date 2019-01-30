@@ -64,7 +64,7 @@ mkdir -p "$EXAMPLES_FLOW_GENERATED_DIR"
 $PROTOC \
   --plugin=protoc-gen-flow=./bin/protoc-gen-flow \
   --js_out=import_style=commonjs,binary:$EXAMPLES_FLOW_GENERATED_DIR \
-  --flow_out=$EXAMPLES_FLOW_GENERATED_DIR \
+  --flow_out=service=true:$EXAMPLES_FLOW_GENERATED_DIR \
   ./proto/othercom/*.proto \
   ./proto/examplecom/*.proto \
   ./proto/*.proto
