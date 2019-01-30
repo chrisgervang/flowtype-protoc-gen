@@ -56,12 +56,12 @@ def _typescript_proto_library_impl(ctx):
 
   ts_out = "service=true:"
 
-  protoc_command = "%s --plugin=protoc-gen-ts=%s --ts_out=%s%s --js_out=import_style=commonjs,binary:%s --descriptor_set_in=%s %s" % (ctx.file._protoc.path, ctx.files._ts_protoc_gen[1].path, ts_out, ctx.var["BINDIR"], ctx.var["BINDIR"], ":".join(descriptor_sets), " ".join(proto_inputs))
+  protoc_command = "%s --plugin=protoc-gen-flow=%s --flow_out=%s%s --js_out=import_style=commonjs,binary:%s --descriptor_set_in=%s %s" % (ctx.file._protoc.path, ctx.files._ts_protoc_gen[1].path, ts_out, ctx.var["BINDIR"], ctx.var["BINDIR"], ":".join(descriptor_sets), " ".join(proto_inputs))
 
   ctx.actions.run_shell(
     inputs = inputs,
     outputs = outputs,
-    progress_message = "Creating Typescript pb files %s" % ctx.label,
+    progress_message = "Creating Flowtype pb files %s" % ctx.label,
     command = "%s && %s" % (protoc_command, " && ".join(file_modifications)),
   )
 
@@ -84,7 +84,7 @@ typescript_proto_library = rule(
       providers = ["proto"],
     ),
     "remove_dependencies": attr.string_list(
-      doc = "Each string given will be grepped and removed from the generated files. This can be useful if your proto files are importing a dependency that the generated Typescript does not use.",
+      doc = "Each string given will be grepped and removed from the generated files. This can be useful if your proto files are importing a dependency that the generated Flowtype does not use.",
       default = [],
       allow_empty = True,
     ),
@@ -97,7 +97,7 @@ typescript_proto_library = rule(
       allow_files = True,
       executable = True,
       cfg = "host",
-      default = Label("@ts_protoc_gen//bin:protoc-gen-ts"),
+      default = Label("@ts_protoc_gen//bin:protoc-gen-flow"),
     ),
     "_protoc": attr.label(
       allow_files = True,
