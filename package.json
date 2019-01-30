@@ -1,7 +1,7 @@
 {
-  "name": "ts-protoc-gen",
+  "name": "flowtype-protoc-gen",
   "version": "0.8.1-pre",
-  "description": "Protoc Plugin for TypeScript Declarations and Service Definitions",
+  "description": "Protoc Plugin for Flowtype Declarations and Service Definitions (forked from ts-protoc-gen)",
   "scripts": {
     "lint": "tslint -c tslint.json 'test/**/*.ts' 'src/**/*.ts'",
     "lint:fix": "npm run lint -- --fix",
@@ -15,19 +15,19 @@
     "prepublishOnly": "npm run build"
   },
   "bin": {
-    "protoc-gen-ts": "bin/protoc-gen-ts"
+    "protoc-gen-ts": "bin/protoc-gen-flow"
   },
-  "repository": "https://github.com/improbable-eng/ts-protoc-gen",
+  "repository": "https://github.com/chrisgervang/flowtype-protoc-gen",
   "keywords": [
     "protobuf",
     "protoc",
-    "typescript",
-    "ts",
+    "flowtype",
+    "flow",
     "grpc",
     "service",
     "proto3"
   ],
-  "author": "Improbable",
+  "author": "Chris Gervang (forked from Improbable)",
   "license": "Apache-2.0",
   "dependencies": {
     "@babel/polyfill": "^7.0.0",
