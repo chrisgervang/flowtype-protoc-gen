@@ -55,7 +55,7 @@ withAllStdIn((inputBuff: Buffer) => {
       }
 
       if (generateServices) {
-        generateGrpcWebService(outputFileName, fileNameToDescriptor[fileName], exportMap)
+        generateGrpcWebService(outputFileName, fileNameToDescriptor[fileName], exportMap, generateTs)
           .forEach(file => codeGenResponse.addFile(file));
       }
     });

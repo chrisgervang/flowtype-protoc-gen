@@ -10,9 +10,15 @@ import {WellKnownTypesMap} from "../WellKnown";
 import {getFieldType, MESSAGE_TYPE} from "../ts/FieldTypes";
 import {CodeGeneratorResponse} from "google-protobuf/google/protobuf/compiler/plugin_pb";
 
-export function generateGrpcWebService(filename: string, descriptor: FileDescriptorProto, exportMap: ExportMap): CodeGeneratorResponse.File[] {
+export function generateGrpcWebService(filename: string, descriptor: FileDescriptorProto, exportMap: ExportMap, generateTs: boolean): CodeGeneratorResponse.File[] {
+  if (generateTs) {
+    return [
+      createFile(generateTypescriptDefinition(descriptor, exportMap), `${filename}_service.d.ts`),
+      createFile(generateJavaScript(descriptor, exportMap), `${filename}_service.js`),
+    ];
+  }
   return [
-    createFile(generateTypescriptDefinition(descriptor, exportMap), `${filename}_service.d.ts`),
+    createFile(generateTypescriptDefinition(descriptor, exportMap), `${filename}_service.flow.js`),
     createFile(generateJavaScript(descriptor, exportMap), `${filename}_service.js`),
   ];
 }
