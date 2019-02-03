@@ -10,9 +10,15 @@ import {WellKnownTypesMap} from "../WellKnown";
 import {getFieldType, MESSAGE_TYPE} from "../ts/FieldTypes";
 import {CodeGeneratorResponse} from "google-protobuf/google/protobuf/compiler/plugin_pb";
 
-export function generateGrpcWebService(filename: string, descriptor: FileDescriptorProto, exportMap: ExportMap): CodeGeneratorResponse.File[] {
+export function generateGrpcWebService(filename: string, descriptor: FileDescriptorProto, exportMap: ExportMap, generateTs: boolean): CodeGeneratorResponse.File[] {
+  if (generateTs) {
+    return [
+      createFile(generateTypescriptDefinition(descriptor, exportMap), `${filename}_service.d.ts`),
+      createFile(generateJavaScript(descriptor, exportMap), `${filename}_service.js`),
+    ];
+  }
   return [
-    createFile(generateTypescriptDefinition(descriptor, exportMap), `${filename}_service.d.ts`),
+    createFile(generateFlowDefinition(descriptor, exportMap), `${filename}_service.js.flow`),
     createFile(generateJavaScript(descriptor, exportMap), `${filename}_service.js`),
   ];
 }
@@ -151,6 +157,95 @@ class GrpcWebServiceDescriptor {
         return new RPCDescriptor(this, service, this.exportMap);
       });
   }
+}
+
+function generateFlowDefinition(fileDescriptor: FileDescriptorProto, exportMap: ExportMap) {
+  const serviceDescriptor = new GrpcWebServiceDescriptor(fileDescriptor, exportMap);
+  const printer = new Printer(0);
+
+  // Header.
+  printer.printLn(`// @flow`);
+  printer.printLn(`// package: ${serviceDescriptor.packageName}`);
+  printer.printLn(`// file: ${serviceDescriptor.filename}`);
+  printer.printEmptyLn();
+
+  if (serviceDescriptor.services.length === 0) {
+    return printer.getOutput();
+  }
+
+  // Import statements.
+  serviceDescriptor.imports
+    .forEach(importDescriptor => {
+      printer.printLn(`import * as ${importDescriptor.namespace} from "${importDescriptor.path}";`);
+    });
+  printer.printLn(`import {grpc} from "grpc-web-client";`);
+  printer.printEmptyLn();
+
+  // Services.
+  serviceDescriptor.services
+    .forEach(service => {
+
+      // Method Type Definitions
+      service.methods.forEach(method => {
+        printer.printLn(`type ${method.serviceName}${method.nameAsPascalCase} = {`);
+        printer.printIndentedLn(`+methodName: string,`);
+        printer.printIndentedLn(`+service: typeof ${method.serviceName},`);
+        printer.printIndentedLn(`+requestStream: ${method.requestStream},`);
+        printer.printIndentedLn(`+responseStream: ${method.responseStream},`);
+        printer.printIndentedLn(`+requestType: typeof ${method.requestType},`);
+        printer.printIndentedLn(`+responseType: typeof ${method.responseType},`);
+        printer.printLn(`};`);
+        printer.printEmptyLn();
+      });
+
+      printer.printLn(`export class ${service.name} {`);
+      printer.printIndentedLn(`static +serviceName: string;`);
+      service.methods.forEach(method => {
+        printer.printIndentedLn(`static +${method.nameAsPascalCase}: ${method.serviceName}${method.nameAsPascalCase};`);
+      });
+      printer.printLn(`}`);
+      printer.printEmptyLn();
+    });
+
+
+
+  printer.printLn(`export type ServiceError = { message: string, code: number; metadata: grpc.Metadata }`);
+  printer.printLn(`export type Status = { details: string, code: number; metadata: grpc.Metadata }`);
+  printer.printEmptyLn();
+  printer.printLn("interface UnaryResponse {");
+  printer.printIndentedLn("cancel(): void;");
+  printer.printLn("}");
+  printer.printLn(`interface ResponseStream<T> {`);
+  printer.printIndentedLn(`cancel(): void;`);
+  printer.printIndentedLn(`on(type: 'data', handler: (message: T) => void): ResponseStream<T>;`);
+  printer.printIndentedLn(`on(type: 'end', handler: () => void): ResponseStream<T>;`);
+  printer.printIndentedLn(`on(type: 'status', handler: (status: Status) => void): ResponseStream<T>;`);
+  printer.printLn(`}`);
+  printer.printLn(`interface RequestStream<T> {`);
+  printer.printIndentedLn(`write(message: T): RequestStream<T>;`);
+  printer.printIndentedLn(`end(): void;`);
+  printer.printIndentedLn(`cancel(): void;`);
+  printer.printIndentedLn(`on(type: 'end', handler: () => void): RequestStream<T>;`);
+  printer.printIndentedLn(`on(type: 'status', handler: (status: Status) => void): RequestStream<T>;`);
+  printer.printLn(`}`);
+  printer.printLn(`interface BidirectionalStream<ReqT, ResT> {`);
+  printer.printIndentedLn(`write(message: ReqT): BidirectionalStream<ReqT, ResT>;`);
+  printer.printIndentedLn(`end(): void;`);
+  printer.printIndentedLn(`cancel(): void;`);
+  printer.printIndentedLn(`on(type: 'data', handler: (message: ResT) => void): BidirectionalStream<ReqT, ResT>;`);
+  printer.printIndentedLn(`on(type: 'end', handler: () => void): BidirectionalStream<ReqT, ResT>;`);
+  printer.printIndentedLn(`on(type: 'status', handler: (status: Status) => void): BidirectionalStream<ReqT, ResT>;`);
+  printer.printLn(`}`);
+  printer.printEmptyLn();
+
+  // Add a client stub that talks with the grpc-web-client library
+  serviceDescriptor.services
+    .forEach(service => {
+      printServiceStubFlowTypes(printer, service);
+      printer.printEmptyLn();
+    });
+
+  return printer.getOutput();
 }
 
 function generateTypescriptDefinition(fileDescriptor: FileDescriptorProto, exportMap: ExportMap) {
@@ -487,6 +582,29 @@ function printBidirectionalStubMethod(printer: CodePrinter, method: RPCMethodDes
       .dedent().printLn(`}`)
     .dedent().printLn(`};`)
   .dedent().printLn(`};`);
+}
+
+function printServiceStubFlowTypes(methodPrinter: Printer, service: RPCDescriptor) {
+  const printer = new CodePrinter(0, methodPrinter);
+
+  printer
+           .printLn(`declare export class ${service.name}Client {`)
+    .indent().printLn(`+serviceHost: string;`)
+        .printEmptyLn()
+             .printLn(`constructor(serviceHost: string, options?: grpc.RpcOptions): ${service.name}Client;`);
+
+  service.methods.forEach((method: RPCMethodDescriptor) => {
+    if (method.requestStream && method.responseStream) {
+      printBidirectionalStubMethodTypes(printer, method);
+    } else if (method.requestStream) {
+      printClientStreamStubMethodTypes(printer, method);
+    } else if (method.responseStream) {
+      printServerStreamStubMethodTypes(printer, method);
+    } else {
+      printUnaryStubMethodTypes(printer, method);
+    }
+  });
+  printer.dedent().printLn("}");
 }
 
 function printServiceStubTypes(methodPrinter: Printer, service: RPCDescriptor) {
