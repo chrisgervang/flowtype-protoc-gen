@@ -118,4 +118,6 @@ def typescript_proto_dependencies():
     name = "deps",
     package_json = "//:package.json",
     yarn_lock = "//:yarn.lock",
+    yarn_version = "1.10.1",
+    node_version = "10.15.1",
   )
