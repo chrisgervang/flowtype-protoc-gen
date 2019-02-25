@@ -117,5 +117,4 @@ def typescript_proto_dependencies():
   npm_install(
     name = "deps",
     package_json = "@ts_protoc_gen//:package.json",
-    package_lock_json = "@ts_protoc_gen//:package-lock.json",
   )
