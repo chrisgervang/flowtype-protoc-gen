@@ -1,5 +1,5 @@
 load("@bazel_tools//tools/build_defs/repo:git.bzl", "git_repository")
-load("@build_bazel_rules_nodejs//:defs.bzl", "npm_install")
+load("@build_bazel_rules_nodejs//:defs.bzl", "yarn_install")
 
 
 def declare_file(ctx, filename, file_modifications):
@@ -114,8 +114,8 @@ def typescript_proto_dependencies():
   """To be run in user's WORKSPACE to install ts-protoc-gen dependencies.
 """
 
-  npm_install(
+  yarn_install(
     name = "deps",
-    package_json = "@ts_protoc_gen//:package.json",
-    package_lock_json = "@ts_protoc_gen//:package-lock.json",
+    package_json = "//:package.json",
+    yarn_lock = "//:yarn.lock",
   )
