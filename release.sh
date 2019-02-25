@@ -38,7 +38,7 @@ if [[ "${PKG_VERSION}" = *-pre ]]; then
   die "package.json version (${PKG_VERSION}) must not end with a '-pre' suffix for a production release"
 fi
 
-yarn install
+yarn
 if ! workspace_is_clean; then
   die "workspace changes detected after yarn install; please commit these changes and try again"
 fi

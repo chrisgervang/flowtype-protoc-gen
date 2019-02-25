@@ -1,7 +1,7 @@
 #!/bin/bash -x
 # Generate typescript definitions and service definitions from proto files
 
-set -e
+set +e
 
 EXAMPLES_GENERATED_DIR=examples/generated
 EXAMPLES_FLOW_GENERATED_DIR=examples/flow/generated
@@ -15,8 +15,20 @@ case "${unameOut}" in
 esac
 echo "You appear to be running on ${platform}"
 
+# Installing yarn
+requiredYarnVersion="$(node -p "require('./package.json').engines.yarn")"
+if [[ "${requiredYarnVersion}" != "$(yarn --version)" ]]; then
+    echo "Installing yarn@${requiredYarnVersion}"
+    curl -o- -L https://yarnpkg.com/install.sh | bash -s -- --version ${requiredYarnVersion}
+fi
+if [[ "$(which yarn)" == "" ]]; then
+    echo "Please follow instructions to setting path for ${requiredYarnVersion}"
+    export PATH="$HOME/.yarn/bin:$PATH"
+fi
+
+
 echo "Ensuring we have Npm packages installed..."
-yarn install
+yarn
 
 echo "Compiling ts-protoc-gen..."
 yarn build
@@ -33,7 +45,7 @@ else
     exit 1
 fi
 
-wget ${PROTOC_URL} --output-document="protoc-${PROTOC_VERSION}.zip"
+curl -sSL ${PROTOC_URL} -o "protoc-${PROTOC_VERSION}.zip"
 unzip "protoc-${PROTOC_VERSION}.zip" -d protoc
 rm "protoc-${PROTOC_VERSION}.zip"
 
