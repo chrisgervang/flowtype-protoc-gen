@@ -17,7 +17,7 @@ http_archive(
     "https://github.com/bazelbuild/rules_webtesting/archive/master.tar.gz",
     ],
   )
-load("@io_bazel_rules_webtesting//web:repositories.bzl", "browser_repositories", "web_test_repositories")
+load("@io_bazel_rules_webtesting//web:repositories.bzl", "web_test_repositories")
 web_test_repositories()
 
 git_repository(
@@ -26,7 +26,20 @@ git_repository(
   commit = "d334fd8e2274fb939cf447106dced97472534e80",
 )
 load("@build_bazel_rules_nodejs//:defs.bzl", "node_repositories")
-node_repositories(package_json = ["//:package.json"])
+
+node_repositories(
+  package_json = ["//:package.json"],
+  yarn_version = "1.12.3",
+  node_version = "10.15.1",
+  node_repositories = {
+    "10.15.1-darwin_amd64": ("node-v10.15.1-darwin-x64.tar.gz", "node-v10.15.1-darwin-x64", "327dcef4b61dead1ae04d2743d3390a2b7e6cc6c389c62cfcfeb0486c5a9f181"),
+    "10.15.1-linux_amd64": ("node-v10.15.1-linux-x64.tar.xz", "node-v10.15.1-linux-x64", "77db68544c7812e925b82ccc41cd4669fdeb191cea8e20053e3f0e86889c4fce"),
+    "10.15.1-windows_amd64": ("node-v10.15.1-win-x64.zip", "node-v10.15.1-win-x64", "bb5bdc9363e4050c94b3f82888141b81630230f86e520abb7dde49081f1292b9"),
+  },
+  yarn_repositories = {
+    "1.12.3": ("yarn-v1.12.3.tar.gz", "yarn-v1.12.3", "02cd4b589ec22c4bdbd2bc5ebbfd99c5e99b07242ad68a539cb37896b93a24f2"),
+  },
+)
 
 load("@ts_protoc_gen//:defs.bzl", "typescript_proto_dependencies")
 typescript_proto_dependencies()

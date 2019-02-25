@@ -26,16 +26,15 @@ deploy:
     secure: NHvQwwkB8FBFXIXHsDmk/34XAmQAxpe7zDvJMuvNN8S8G8dLOH5dN6Cv01eZ6m2KpTwDh76uSrVo1eJv9ljAV0Fj99O3JzwQ6U+N74eZPKwm4MIf2kmnyYC4sJtgbQTurnrZFrixC8lFuEPeZbBM8xD17lg+h1BgOxusaA+QtX3XLT14GZMKrezp9OtuGxyftIlNbc8knt+zvdF9npyb4E6uyRM5cnkyLrxz/JawehtynKv1eD60MvC4jQ3JLDPlaAM7Kx09zpLrgkbZd3jneYG0EHEuEEvFnOwyQfJJDnp9G9dxSv6rzjY+givzlT3XiGmuVTj6N9AT7lFobUySQGMxq5xiH8h4GfQhxPqMfFsqZaIWRuH5VLH+fPsjgmBHnrfyuipkGAkcxrKpu72yKxyQq0rATjyVoHgrfVf4hHxTvogjReK3/nAnpVKEgFxi6i9RTblkVddmuwhfauLT5pmbCU/YL0Wc2vu0RIU3NQTm9AoJvX/dSBfQFixVBWom5aphyYeZMxpGnjnZGVYYNcCMVBN5alqqnmTt9w/tTsYdiX4N11MN0cUScOvIZarY2JdvEwIE+h+r988/MuUCXF4IrRBzRKdp1ncA1nqalwKS8sJMMr4q2jCf9I33zMu/J42M2MIwYKmITijLyq0ue02n37w1egG438yRImC/f4Y=
   on:
     branch: master
-cache:
-  directories:
-  - node_modules
+cache: yarn
 before_install:
 - BAZEL_VERSION=0.11.0
 - BAZEL_DEB="bazel_${BAZEL_VERSION}-linux-x86_64.deb"
 - wget https://github.com/bazelbuild/bazel/releases/download/${BAZEL_VERSION}/${BAZEL_DEB} -O "${BAZEL_DEB}"
 - sudo dpkg -i ${BAZEL_DEB}
 - rm ${BAZEL_DEB}
-install:
-- npm install
+- YARN_VERSION=$(node -p "require('./package.json').engines.yarn")
+- curl -o- -L https://yarnpkg.com/install.sh | bash -s -- --version ${YARN_VERSION}
+- export PATH="$HOME/.yarn/bin:$PATH"
 script:
 - "./travis-ci-build.sh"
