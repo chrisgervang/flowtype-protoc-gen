@@ -1,8 +1,8 @@
 #!/bin/bash
 set -ex
 
-npm run lint
-npm test
+yarn run lint
+yarn test
 
 ./generate.sh
 MODIFIED_FILES=$(git diff --name-only)

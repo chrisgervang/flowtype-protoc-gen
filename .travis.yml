@@ -35,7 +35,8 @@ before_install:
 - wget https://github.com/bazelbuild/bazel/releases/download/${BAZEL_VERSION}/${BAZEL_DEB} -O "${BAZEL_DEB}"
 - sudo dpkg -i ${BAZEL_DEB}
 - rm ${BAZEL_DEB}
-install:
-- npm install
+- YARN_VERSION = $(node -p "require('./package.json').engines.yarn")
+- curl -o- -L https://yarnpkg.com/install.sh | bash -s -- --version ${YARN_VERSION}
+- export PATH="$HOME/.yarn/bin:$PATH"
 script:
 - "./travis-ci-build.sh"

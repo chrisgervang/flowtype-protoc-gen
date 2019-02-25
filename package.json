@@ -4,15 +4,15 @@
   "description": "Protoc Plugin for Flowtype Declarations and Service Definitions (forked from ts-protoc-gen)",
   "scripts": {
     "lint": "tslint -c tslint.json 'test/**/*.ts' 'src/**/*.ts'",
-    "lint:fix": "npm run lint -- --fix",
+    "lint:fix": "yarn run lint -- --fix",
     "clean": "rm -rf lib",
-    "build": "npm run clean && tsc",
+    "build": "yarn run clean && tsc",
     "generate": "./generate.sh",
-    "test": "npm run test:unit && npm run test:integration && npm run test-flow:integration",
+    "test": "yarn run test:unit && yarn run test:integration && yarn run test-flow:integration",
     "test:unit": "./test/mocha-run-suite.sh 'test/unit/**/*.ts'",
     "test:integration": "./test/mocha-run-suite.sh 'test/integration/**/*.ts'",
     "test-flow:integration": "./test/flow/mocha-run-suite.sh 'test/flow/integration/**/*.js'",
-    "prepublishOnly": "npm run build"
+    "prepublishOnly": "yarn run build"
   },
   "bin": {
     "protoc-gen-flow": "bin/protoc-gen-flow"
@@ -34,9 +34,9 @@
     "google-protobuf": "^3.6.1"
   },
   "engines": {
-    "node": ">= 8",
-    "npm": ">= 5",
-    "yarn": ">= 1.10.0"
+    "node": "10.15.1",
+    "npm": ">= 6",
+    "yarn": "1.10.1"
   },
   "devDependencies": {
     "@babel/core": "^7.1.6",
