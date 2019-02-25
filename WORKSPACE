@@ -26,7 +26,11 @@ git_repository(
   commit = "d334fd8e2274fb939cf447106dced97472534e80",
 )
 load("@build_bazel_rules_nodejs//:defs.bzl", "node_repositories")
-node_repositories(package_json = ["//:package.json"])
+node_repositories(
+  package_json = ["//:package.json"],
+  yarn_version = "1.10.1",
+  node_version = "10.15.1",
+)
 
 load("@ts_protoc_gen//:defs.bzl", "typescript_proto_dependencies")
 typescript_proto_dependencies()
