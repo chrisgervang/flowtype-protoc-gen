@@ -17,7 +17,7 @@ http_archive(
     "https://github.com/bazelbuild/rules_webtesting/archive/master.tar.gz",
     ],
   )
-load("@io_bazel_rules_webtesting//web:repositories.bzl", "browser_repositories", "web_test_repositories")
+load("@io_bazel_rules_webtesting//web:repositories.bzl", "web_test_repositories")
 web_test_repositories()
 
 git_repository(
