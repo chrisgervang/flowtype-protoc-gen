@@ -38,7 +38,7 @@ describe("repeated primitives", () => {
     msg.setMyUint64List([123, 456]);
     assert.deepEqual((msg.getMyUint64List(): Array<number>), [123, 456]);
     msg.setMySint32List([123, 456]);
-    assert.deepEqual((msg.getMySint32List(): Array<number>), [123, 456]);
+    assert.deepEqual((msg.getMySint32List(): Array<string>), [123, 456]);
     msg.setMySint64List([123, 456]);
     assert.deepEqual((msg.getMySint64List(): Array<number>), [123, 456]);
     msg.setMyFixed32List([123, 456]);
