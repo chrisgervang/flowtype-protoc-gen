@@ -48,6 +48,13 @@ export function withinNamespaceFromExportEntryFlow(name: string, exportEntry: Ex
   return name;
 }
 
+export function withinNamespaceFromExportEntryFlowJson(name: string, exportEntry: ExportMessageEntry | ExportEnumEntry) {
+  if (exportEntry.pkg) {
+    return name.substring(exportEntry.pkg.length + 1).replace(".", "_");
+  }
+  return name;
+}
+
 export function replaceProtoSuffix(protoFilePath: string): string {
   const suffix = ".proto";
   const hasProtoSuffix = protoFilePath.slice(protoFilePath.length - suffix.length) === suffix;

@@ -9,6 +9,7 @@ ts_library(
         "service/*.ts",
         "ts/*.ts",
         "flow/*.ts",
+        "flow-json/*.ts"
     ]),
     deps = [],
     tsconfig = "//:tsconfig.json",

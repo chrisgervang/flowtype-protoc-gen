@@ -1,5 +1,6 @@
 import {printFileDescriptorTSD} from "./ts/fileDescriptorTSD";
 import {printFileDescriptorFlow} from "./flow/fileDescriptorFlow";
+import { printFileDescriptorFlowJson } from "./flow-json/fileDescriptorFlowJson";
 import {ExportMap} from "./ExportMap";
 import {replaceProtoSuffix, withAllStdIn} from "./util";
 import {CodeGeneratorRequest, CodeGeneratorResponse} from "google-protobuf/google/protobuf/compiler/plugin_pb";
@@ -53,6 +54,12 @@ withAllStdIn((inputBuff: Buffer) => {
         thisFileFlow.setContent(printFileDescriptorFlow(fileNameToDescriptor[fileName], exportMap));
         codeGenResponse.addFile(thisFileFlow);
       }
+
+      // Generate Json Flowtype Files
+      const thisFileFlow = new CodeGeneratorResponse.File();
+      thisFileFlow.setName(outputFileName + ".json.flow.js");
+      thisFileFlow.setContent(printFileDescriptorFlowJson(fileNameToDescriptor[fileName], exportMap));
+      codeGenResponse.addFile(thisFileFlow);
 
       if (generateServices) {
         generateGrpcWebService(outputFileName, fileNameToDescriptor[fileName], exportMap)
